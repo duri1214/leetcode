@@ -78,13 +78,35 @@ using namespace std;
 //    std::cout << "Hello World!\n";
 //}
 
+//leetcode 5. 最长回文子串 暴力法 On3 leetcode超时
+class Solution {
+public:
+    string longestPalindrome(string s) {
+        string ret, temp;
+        for (int i = 0; i < s.size(); ++i)
+        {
+            for (int j = i; j < s.size(); ++j)  //j=i 注意
+            {
+                temp += s[j];
+                string rev_temp(temp);
+                reverse(rev_temp.begin(), rev_temp.end());
+                if (temp == rev_temp)
+                {
+                    ret = (rev_temp.size() > ret.size()) ? temp : ret;
+                }
+            }
+            temp = "";
+        }
+        return ret;
+    }
+};
 
 int main()
 {
     std::cout << "Hello World!\n";
-    vector<int> nums{ 3,2,4 };
-    //Solution test;
-    //test.twoSum(nums, 6);
+    string s = "cbbd";
+    Solution test;
+    test.longestPalindrome(s);
     std::cout << "Hello World!\n";
     std::cout << "Hello World!\n";
 }
