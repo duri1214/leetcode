@@ -78,26 +78,61 @@ using namespace std;
 //    std::cout << "Hello World!\n";
 //}
 
-//leetcode 5. 最长回文子串 暴力法 On3 leetcode超时
+////leetcode 5. 最长回文子串 暴力法 On3 leetcode超时
+//class Solution {
+//public:
+//    string longestPalindrome(string s) {
+//        string ret, temp;
+//        for (int i = 0; i < s.size(); ++i)
+//        {
+//            for (int j = i; j < s.size(); ++j)  //j=i 注意
+//            {
+//                temp += s[j];
+//                string rev_temp(temp);
+//                reverse(rev_temp.begin(), rev_temp.end());
+//                if (temp == rev_temp)
+//                {
+//                    ret = (rev_temp.size() > ret.size()) ? temp : ret;
+//                }
+//            }
+//            temp = "";
+//        }
+//        return ret;
+//    }
+//};
+
+//leetcode 5. 最长回文子串 动态规划 时间On2 空间On2
 class Solution {
 public:
     string longestPalindrome(string s) {
-        string ret, temp;
-        for (int i = 0; i < s.size(); ++i)
+        vector<vector<int>> dp(s.size(),vector<int>(s.size(),0));
+        int left = 0;
+        int right = 0;
+        int max_len = 0;
+        for (int i = s.size() -1; i >= 0; --i)
         {
-            for (int j = i; j < s.size(); ++j)  //j=i 注意
+            for (int j = i; j < s.size(); ++j)
             {
-                temp += s[j];
-                string rev_temp(temp);
-                reverse(rev_temp.begin(), rev_temp.end());
-                if (temp == rev_temp)
+                if (s[i] == s[j])
                 {
-                    ret = (rev_temp.size() > ret.size()) ? temp : ret;
+                    if (j - i <= 1)
+                    {
+                        dp[i][j] = 1;
+                    }
+                    else if(dp[i+1][j-1])
+                    {
+                        dp[i][j] = 1;
+                    }
+                }
+                if (dp[i][j] && (j - i + 1) > max_len)
+                {
+                    max_len = (j - i + 1);
+                    left = i;
+                    right = j;
                 }
             }
-            temp = "";
         }
-        return ret;
+        return s.substr(left, right - left + 1);
     }
 };
 
