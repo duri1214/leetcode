@@ -101,40 +101,74 @@ using namespace std;
 //    }
 //};
 
-//leetcode 5. 最长回文子串 动态规划 时间On2 空间On2
+////leetcode 5. 最长回文子串 动态规划 时间On2 空间On2
+//class Solution {
+//public:
+//    string longestPalindrome(string s) {
+//        vector<vector<int>> dp(s.size(),vector<int>(s.size(),0));
+//        int left = 0;
+//        int right = 0;
+//        int max_len = 0;
+//        for (int i = s.size() -1; i >= 0; --i)
+//        {
+//            for (int j = i; j < s.size(); ++j)//注意遍历顺序
+//            {
+//                if (s[i] == s[j])
+//                {
+//                    if (j - i <= 1)
+//                    {
+//                        dp[i][j] = 1;
+//                    }
+//                    else if(dp[i+1][j-1])
+//                    {
+//                        dp[i][j] = 1;
+//                    }
+//                }
+//                if (dp[i][j] && (j - i + 1) > max_len)
+//                {
+//                    max_len = (j - i + 1);
+//                    left = i;
+//                    right = j;
+//                }
+//            }
+//        }
+//        return s.substr(left, right - left + 1);
+//    }
+//};
+
+//leetcode 5. 最长回文子串 双指针 时间On2 空间O1
 class Solution {
 public:
-    string longestPalindrome(string s) {
-        vector<vector<int>> dp(s.size(),vector<int>(s.size(),0));
-        int left = 0;
-        int right = 0;
-        int max_len = 0;
-        for (int i = s.size() -1; i >= 0; --i)
+    int left = 0;
+    int right = 0;
+    int max_len = 0;
+
+    void extend(const string& s, int i, int j, int n)
+    {
+        while (i >= 0 && i < n && s[i] == s[j])//从中间，向两边判断
         {
-            for (int j = i; j < s.size(); ++j)
+            if ((j - i + 1) > max_len)
             {
-                if (s[i] == s[j])
-                {
-                    if (j - i <= 1)
-                    {
-                        dp[i][j] = 1;
-                    }
-                    else if(dp[i+1][j-1])
-                    {
-                        dp[i][j] = 1;
-                    }
-                }
-                if (dp[i][j] && (j - i + 1) > max_len)
-                {
-                    max_len = (j - i + 1);
-                    left = i;
-                    right = j;
-                }
+                max_len = j - i + 1;
+                left = i;
+                right = j;
             }
+            --i;
+            ++j;
         }
+    }
+
+    string longestPalindrome(string s) {
+        for (int i = 0; i < s.size(); ++i)
+        {
+            extend(s, i, i, s.size());      //一个元素做为中心点
+            extend(s, i, i+1, s.size());    //两个元素做为中心点
+        }
+
         return s.substr(left, right - left + 1);
     }
 };
+
 
 int main()
 {
