@@ -1,9 +1,14 @@
 ﻿// leetcode.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
 //
+
+#include<string>
+#include <algorithm>
 #include<vector>
 #include<map>
 #include<unordered_map>
 #include <iostream>
+
+
 
 using namespace std;
 //leetcode题目代码，均提交测试通过，同一题目，方法，从上往下，逐步优化
@@ -136,36 +141,80 @@ using namespace std;
 //    }
 //};
 
-//leetcode 5. 最长回文子串 双指针 时间On2 空间O1
-class Solution {
+////leetcode 5. 最长回文子串 双指针 时间On2 空间O1
+//class Solution {
+//public:
+//    int left = 0;
+//    int right = 0;
+//    int max_len = 0;
+//
+//    void extend(const string& s, int i, int j, int n)
+//    {
+//        while (i >= 0 && i < n && s[i] == s[j])//从中间，向两边判断
+//        {
+//            if ((j - i + 1) > max_len)
+//            {
+//                max_len = j - i + 1;
+//                left = i;
+//                right = j;
+//            }
+//            --i;
+//            ++j;
+//        }
+//    }
+//
+//    string longestPalindrome(string s) {
+//        for (int i = 0; i < s.size(); ++i)
+//        {
+//            extend(s, i, i, s.size());      //一个元素做为中心点
+//            extend(s, i, i+1, s.size());    //两个元素做为中心点
+//        }
+//
+//        return s.substr(left, right - left + 1);
+//    }
+//};
+//
+//
+//int main()
+//{
+//    std::cout << "Hello World!\n";
+//    string s = "cbbd";
+//    Solution test;
+//    test.longestPalindrome(s);
+//    std::cout << "Hello World!\n";
+//    std::cout << "Hello World!\n";
+//}
+
+class Solution { //15. 三数之和 暴力法 时间复杂度：On3 超出时间限制 空间复杂度：On
 public:
-    int left = 0;
-    int right = 0;
-    int max_len = 0;
-
-    void extend(const string& s, int i, int j, int n)
-    {
-        while (i >= 0 && i < n && s[i] == s[j])//从中间，向两边判断
+    vector<vector<int>> threeSum(vector<int>& nums) {
+        vector<vector<int>> ret;
+        unordered_map<string, vector<int>> map_;
+        for (int i = 0; i < nums.size(); ++i)
         {
-            if ((j - i + 1) > max_len)
+            for (int j = i + 1; j < nums.size(); ++j)
             {
-                max_len = j - i + 1;
-                left = i;
-                right = j;
+                for (int k = j + 1; k < nums.size(); ++k)
+                {
+                    if (nums[i] + nums[j] + nums[k] == 0)
+                    {
+                        ret.push_back({ nums[i],nums[j],nums[k] });
+                    }
+                }
             }
-            --i;
-            ++j;
         }
-    }
-
-    string longestPalindrome(string s) {
-        for (int i = 0; i < s.size(); ++i)
+        for (auto& its : ret)
         {
-            extend(s, i, i, s.size());      //一个元素做为中心点
-            extend(s, i, i+1, s.size());    //两个元素做为中心点
+           std::sort(its.begin(), its.end());
+           map_[to_string(its[0]) + "" + to_string(its[1]) + "" + to_string(its[2])] = its;
+       
         }
-
-        return s.substr(left, right - left + 1);
+        ret.clear();
+        for (auto &it: map_)
+        {
+            ret.push_back(it.second);
+        }
+        return ret;
     }
 };
 
@@ -173,9 +222,9 @@ public:
 int main()
 {
     std::cout << "Hello World!\n";
-    string s = "cbbd";
+    vector<int> s = { -1,0,1,2,-1,-4 };
     Solution test;
-    test.longestPalindrome(s);
+    test.threeSum(s);
     std::cout << "Hello World!\n";
     std::cout << "Hello World!\n";
 }
