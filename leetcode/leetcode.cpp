@@ -220,7 +220,51 @@ using namespace std;
 //    }
 //};
 
-class Solution { //15. 三数之和 哈希法 时间复杂度：On2  空间复杂度：On
+//class Solution { //15. 三数之和 哈希法 时间复杂度：On2  空间复杂度：On,比较难写
+//public:
+//    vector<vector<int>> threeSum(vector<int>& nums) {
+//        vector<vector<int>> ret;
+//        sort(nums.begin(), nums.end());//排序，找出a+b+c=0,利于三元组a,b,c去重
+//        //a,b,c可以相等，皆为0；a=b=c;
+//        //a=b!=c;
+//        //a!=b=c;
+//        //a!=b!c;
+//        //关键点，a不能重复出现，b不能重复出现，c不能重复出现（指的a所在位置的值）
+//        for (int i = 0; i < nums.size(); ++i)
+//        {
+//            if (nums[i] > 0)//最小的数，大于0，不可能存在和为0
+//            {
+//                continue;
+//            }
+//            if (i > 0 && nums[i] == nums[i - 1])//a和前一个元素比较，相等，就忽略
+//            {
+//                continue;
+//            }
+//            unordered_set<int> set_;
+//            for (int j = i + 1; j < nums.size(); ++j)
+//            {
+//                if (j > i + 2 && nums[j] == nums[j - 1] //没有下一行，c和前一个元素相等，就忽略，排除了b=c的情况
+//                    && nums[j - 1] == nums[j - 2])//这里的关键是，保留b=c的情况
+//                {
+//                    continue;
+//                }
+//                int c = 0 - (nums[i] + nums[j]);
+//                if (set_.find(c) != set_.end())
+//                {
+//                    ret.push_back({ nums[i],nums[j],c });
+//                    set_.erase(c);//去重，c的元素，不能重复出现
+//                }
+//                else
+//                {
+//                    set_.insert(nums[j]);
+//                }
+//            }           
+//        }
+//        return ret;
+//    }
+//};
+
+class Solution { //15. 三数之和 双指针法 时间复杂度：On2  空间复杂度：O1
 public:
     vector<vector<int>> threeSum(vector<int>& nums) {
         vector<vector<int>> ret;
@@ -229,7 +273,7 @@ public:
         //a=b!=c;
         //a!=b=c;
         //a!=b!c;
-        //关键点，a不能重复出现，b不能重复出现，c不能重复出现
+        //关键点，a不能重复出现，b不能重复出现，c不能重复出现（指的a所在位置的值）
         for (int i = 0; i < nums.size(); ++i)
         {
             if (nums[i] > 0)//最小的数，大于0，不可能存在和为0
@@ -240,31 +284,37 @@ public:
             {
                 continue;
             }
-            unordered_set<int> set_;
-            for (int j = i + 1; j < nums.size(); ++j)
+            int left = i + 1;
+            int right = nums.size() - 1;
+            while (left<right)
             {
-                if (j > i + 2 && nums[j] == nums[j - 1] //没有下一行，c和前一个元素相等，就忽略，排除了b=c的情况
-                    && nums[j - 1] == nums[j - 2])//这里的关键是，保留b=c的情况
+                if (0 == nums[i] + nums[left] + nums[right])
                 {
-                    continue;
+                    ret.push_back({ nums[i],nums[left],nums[right] });
+                    while (left < right && nums[left] == nums[left + 1])
+                    {
+                        left++;
+                    }
+                    while (left > right && nums[right] == nums[right - 1])
+                    {
+                        right--;
+                    }
+                    left++;
+                    right--;
                 }
-                int c = 0 - (nums[i] + nums[j]);
-                if (set_.find(c) != set_.end())
+                else if(0 > nums[i] + nums[left] + nums[right])
                 {
-                    ret.push_back({ nums[i],nums[j],c });
-                    set_.erase(c);//去重，c的元素，不能重复出现
+                    left++;
                 }
-                else
+                else if (0 < nums[i] + nums[left] + nums[right])
                 {
-                    set_.insert(nums[j]);
+                    right--;
                 }
-            }           
+            }
         }
         return ret;
     }
 };
-
-
 
 int main()
 {
