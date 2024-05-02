@@ -327,39 +327,113 @@ using namespace std;
 //    std::cout << "Hello World!\n";
 //}
 
-class Solution {//17. 电话号码的字母组合 回朔法 时间复杂度：O4n 空间复杂度：O4n
-                //n为输入字符的长度，每一个数字都有（3−4）个字符选择，可以算成4
+//class Solution {//17. 电话号码的字母组合 回朔法 时间复杂度：O4n 空间复杂度：O4n
+//                //n为输入字符的长度，每一个数字都有（3−4）个字符选择，可以算成4
+//
+//private:
+//    const string letterMap_[10] = { "",/*0*/"","abc","def" ,"ghi" ,"jkl" ,"mno" ,"pqrs" ,"tuv" ,"wxyz" };
+//public:
+//    vector<string> ret_;
+//    string str_;
+//    void backtracking(const string& s, int index)
+//    {
+//        if (index == s.size())
+//        {
+//            ret_.push_back(str_);
+//            return;
+//        }
+//        int digit = s[index] - '0';                 //char转换int
+//        string letters = letterMap_[digit];         //取数字对应的字符集
+//        for (int i = 0; i < letters.size(); ++i)
+//        {
+//            str_.push_back(letters[i]);             //处理
+//            backtracking(s, index + 1);             //递归，加1，进入下一层
+//            str_.pop_back();                        //回溯
+//        }
+//    }
+//
+//    vector<string> letterCombinations(string s) {
+//        ret_.clear();
+//        str_.clear();
+//        if (0 == s.size())
+//        {
+//            return ret_;
+//        }
+//        backtracking(s, 0);
+//        return ret_;
+//    }
+//};
+//
+//int main()
+//{
+//    std::cout << "Hello World!\n";
+//    string s = "23";
+//    Solution test;
+//    test.letterCombinations(s);
+//    std::cout << "Hello World!\n";
+//    std::cout << "Hello World!\n";
+//}
 
-private:
-    const string letterMap_[10] = { "",/*0*/"","abc","def" ,"ghi" ,"jkl" ,"mno" ,"pqrs" ,"tuv" ,"wxyz" };
+class Solution { //18. 四数之和 双指针法 时间复杂度：On3 空间复杂度：O1
 public:
-    vector<string> ret_;
-    string str_;
-    void backtracking(const string& s, int index)
-    {
-        if (index == s.size())
+    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+        vector<vector<int>> ret_;
+        sort(nums.begin(), nums.end());
+        for (int i = 0; i < nums.size(); ++i)
         {
-            ret_.push_back(str_);
-            return;
+            //if (nums[i] > target) //案例：1,-2,-5,-4,-3,3,3,5；有问题
+            //{
+            //    break;
+            //}
+            if (nums[i] > target && nums[i] >= 0)//剪枝处理，考虑，考虑正负
+            {
+                break;
+            }
+            if (i > 0 && nums[i - 1] == nums[i])//对于nums[i]位置去重
+            {
+                continue;
+            }
+            for (int j = i + 1; j < nums.size(); ++j)
+            {
+                //2级剪枝处理，考虑，考虑正负
+                if (nums[i] + nums[j] > target && nums[i] + nums[j] >= 0)
+                {
+                    break;
+                }
+                if (j > i + 1 && nums[j - 1] == nums[j])//对于nums[j]位置去重
+                {
+                    continue;
+                }
+                int left = j + 1;
+                int right = nums.size() - 1;
+                while (left<right)
+                {
+                    if ((int64_t)nums[i] + nums[j] + nums[left] + nums[right] == target)//int会溢出
+                    {
+                        ret_.push_back({ nums[i] , nums[j] , nums[left] , nums[right] });
+                        while(left + 1 < right && nums[left] == nums[left + 1])
+                        {
+                            ++left;//对于nums[left]位置去重，此处，注意循环，要一直去重
+                        }
+                        while (right - 1 > left && nums[right] == nums[right - 1])
+                        {
+                            --right;//对于nums[right]位置去重，此处，注意循环，要一直去重
+                        }
+                        //没有重复，找到答案，双指针同时收缩
+                        ++left;//四个值相加==target，3个不变，只变化一个，结果肯定不等target
+                        --right;
+                    }
+                    else if ((int64_t)nums[i] + nums[j] + nums[left] + nums[right] < target)
+                    {
+                        ++left;
+                    }
+                    else if((int64_t)nums[i] + nums[j] + nums[left] + nums[right] > target)
+                    {
+                        --right;
+                    }                   
+                }
+            }
         }
-        int digit = s[index] - '0';                 //char转换int
-        string letters = letterMap_[digit];         //取数字对应的字符集
-        for (int i = 0; i < letters.size(); ++i)
-        {
-            str_.push_back(letters[i]);             //处理
-            backtracking(s, index + 1);             //递归，加1，进入下一层
-            str_.pop_back();                        //回溯
-        }
-    }
-
-    vector<string> letterCombinations(string s) {
-        ret_.clear();
-        str_.clear();
-        if (0 == s.size())
-        {
-            return ret_;
-        }
-        backtracking(s, 0);
         return ret_;
     }
 };
@@ -367,9 +441,9 @@ public:
 int main()
 {
     std::cout << "Hello World!\n";
-    string s = "23";
+    vector<int> s = { 1,0,-1,0,-2,2 };
     Solution test;
-    test.letterCombinations(s);
+    test.fourSum(s, 0);
     std::cout << "Hello World!\n";
     std::cout << "Hello World!\n";
 }
