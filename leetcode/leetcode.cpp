@@ -374,76 +374,128 @@ using namespace std;
 //    std::cout << "Hello World!\n";
 //}
 
-class Solution { //18. 四数之和 双指针法 时间复杂度：On3 空间复杂度：O1
+//class Solution { //18. 四数之和 双指针法 时间复杂度：On3 空间复杂度：O1
+//public:
+//    vector<vector<int>> fourSum(vector<int>& nums, int target) {
+//        vector<vector<int>> ret_;
+//        sort(nums.begin(), nums.end());
+//        for (int i = 0; i < nums.size(); ++i)
+//        {
+//            //if (nums[i] > target) //案例：1,-2,-5,-4,-3,3,3,5；有问题
+//            //{
+//            //    break;
+//            //}
+//            if (nums[i] > target && nums[i] >= 0)//剪枝处理，考虑，考虑正负
+//            {
+//                break;
+//            }
+//            if (i > 0 && nums[i - 1] == nums[i])//对于nums[i]位置去重
+//            {
+//                continue;
+//            }
+//            for (int j = i + 1; j < nums.size(); ++j)
+//            {
+//                //2级剪枝处理，考虑，考虑正负
+//                if (nums[i] + nums[j] > target && nums[i] + nums[j] >= 0)
+//                {
+//                    break;
+//                }
+//                if (j > i + 1 && nums[j - 1] == nums[j])//对于nums[j]位置去重
+//                {
+//                    continue;
+//                }
+//                int left = j + 1;
+//                int right = nums.size() - 1;
+//                while (left<right)
+//                {
+//                    if ((int64_t)nums[i] + nums[j] + nums[left] + nums[right] == target)//int会溢出
+//                    {
+//                        ret_.push_back({ nums[i] , nums[j] , nums[left] , nums[right] });
+//                        while(left + 1 < right && nums[left] == nums[left + 1])
+//                        {
+//                            ++left;//对于nums[left]位置去重，此处，注意循环，要一直去重
+//                        }
+//                        while (right - 1 > left && nums[right] == nums[right - 1])
+//                        {
+//                            --right;//对于nums[right]位置去重，此处，注意循环，要一直去重
+//                        }
+//                        //没有重复，找到答案，双指针同时收缩
+//                        ++left;//四个值相加==target，3个不变，只变化一个，结果肯定不等target
+//                        --right;
+//                    }
+//                    else if ((int64_t)nums[i] + nums[j] + nums[left] + nums[right] < target)
+//                    {
+//                        ++left;
+//                    }
+//                    else if((int64_t)nums[i] + nums[j] + nums[left] + nums[right] > target)
+//                    {
+//                        --right;
+//                    }                   
+//                }
+//            }
+//        }
+//        return ret_;
+//    }
+//};
+//
+//int main()
+//{
+//    std::cout << "Hello World!\n";
+//    vector<int> s = { 1,0,-1,0,-2,2 };
+//    Solution test;
+//    test.fourSum(s, 0);
+//    std::cout << "Hello World!\n";
+//    std::cout << "Hello World!\n";
+//}
+
+ 
+ //Definition for singly-linked list.
+ struct ListNode {
+     int val;
+     ListNode *next;
+     ListNode() : val(0), next(nullptr) {}
+     ListNode(int x) : val(x), next(nullptr) {}
+     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ };
+ 
+ #pragma warning(disable:6011 28182)
+
+class Solution {//19. 删除链表的倒数第 N 个结点 时间复杂度：On 空间复杂度：O1
 public:
-    vector<vector<int>> fourSum(vector<int>& nums, int target) {
-        vector<vector<int>> ret_;
-        sort(nums.begin(), nums.end());
-        for (int i = 0; i < nums.size(); ++i)
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        ListNode* dummyHead = new ListNode();//增加头节点，减少很麻烦
+        dummyHead->next = head;
+        ListNode* slow = dummyHead;
+        ListNode* fast = dummyHead;
+        while (fast != nullptr && n--)
         {
-            //if (nums[i] > target) //案例：1,-2,-5,-4,-3,3,3,5；有问题
-            //{
-            //    break;
-            //}
-            if (nums[i] > target && nums[i] >= 0)//剪枝处理，考虑，考虑正负
-            {
-                break;
-            }
-            if (i > 0 && nums[i - 1] == nums[i])//对于nums[i]位置去重
-            {
-                continue;
-            }
-            for (int j = i + 1; j < nums.size(); ++j)
-            {
-                //2级剪枝处理，考虑，考虑正负
-                if (nums[i] + nums[j] > target && nums[i] + nums[j] >= 0)
-                {
-                    break;
-                }
-                if (j > i + 1 && nums[j - 1] == nums[j])//对于nums[j]位置去重
-                {
-                    continue;
-                }
-                int left = j + 1;
-                int right = nums.size() - 1;
-                while (left<right)
-                {
-                    if ((int64_t)nums[i] + nums[j] + nums[left] + nums[right] == target)//int会溢出
-                    {
-                        ret_.push_back({ nums[i] , nums[j] , nums[left] , nums[right] });
-                        while(left + 1 < right && nums[left] == nums[left + 1])
-                        {
-                            ++left;//对于nums[left]位置去重，此处，注意循环，要一直去重
-                        }
-                        while (right - 1 > left && nums[right] == nums[right - 1])
-                        {
-                            --right;//对于nums[right]位置去重，此处，注意循环，要一直去重
-                        }
-                        //没有重复，找到答案，双指针同时收缩
-                        ++left;//四个值相加==target，3个不变，只变化一个，结果肯定不等target
-                        --right;
-                    }
-                    else if ((int64_t)nums[i] + nums[j] + nums[left] + nums[right] < target)
-                    {
-                        ++left;
-                    }
-                    else if((int64_t)nums[i] + nums[j] + nums[left] + nums[right] > target)
-                    {
-                        --right;
-                    }                   
-                }
-            }
+            fast = fast->next;
         }
-        return ret_;
+        fast = fast->next;//让慢指针在被删除的前一个位置停下
+        while (fast != nullptr)
+        {
+            fast = fast->next;
+            slow = slow->next;
+        }
+        ListNode* temp = slow->next;
+        slow->next = slow->next->next;
+        delete temp;//防止内存泄漏
+        return dummyHead->next;
     }
 };
 
 int main()
 {
     std::cout << "Hello World!\n";
-    vector<int> s = { 1,0,-1,0,-2,2 };
+    int values[] = { 1,2,3,4,5 };
+    ListNode* list = new ListNode(values[0]);
+    ListNode* cur = list;
+    for (int i = 1; i < 5; ++i) {
+        cur->next = new ListNode(values[i]);
+        cur = cur->next;
+    }
     Solution test;
-    test.fourSum(s, 0);
+    test.removeNthFromEnd(list, 0);
     std::cout << "Hello World!\n";
     std::cout << "Hello World!\n";
 }
