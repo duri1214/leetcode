@@ -502,50 +502,99 @@ using namespace std;
 //    std::cout << "Hello World!\n";
 //}
 
- class Solution {//20. 有效的括号 时间复杂度：On 空间复杂度：On
+// class Solution {//20. 有效的括号 时间复杂度：On 空间复杂度：On
+// public:
+//     bool isValid(string s) {
+//         if (0 != s.size() % 2)//奇数肯定不匹配
+//         {
+//             return false;
+//         }
+//         stack<char> st_;
+//         for (int i = 0; i < s.size(); ++i)//不配的三种情况：1、遍历完字符串，栈不为空
+//         {                                 //2、字符串未遍历完，栈为空
+//             if ('(' == s[i])              //3、遍历中，不匹配
+//             {
+//                 st_.push(')');
+//             }
+//             else if ('[' == s[i])
+//             {
+//                 st_.push(']');
+//             }
+//             else if ('{' == s[i])
+//             {
+//                 st_.push('}');
+//             }
+//             else if(st_.empty() || st_.top() != s[i])//情况2、3
+//             {
+//                 return false;
+//             }
+//             else
+//             {
+//                 st_.pop();
+//             }
+//         }
+//         return st_.empty();    //为空，属于全部匹配的情况，不为空：情况1     
+//     }
+// };
+//
+//int main()
+//{
+//    std::cout << "Hello World!\n";
+//    string s = "()[]{}";
+//    Solution test;
+//    test.isValid(s);
+//    std::cout << "Hello World!\n";
+//    std::cout << "Hello World!\n";
+//}
+
+
+//Definition for singly-linked list.
+struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode() : val(0), next(nullptr) {}
+    ListNode(int x) : val(x), next(nullptr) {}
+    ListNode(int x, ListNode *next) : val(x), next(next) {}
+ };
+ 
+ class Solution {//24. 两两交换链表中的节点 时间复杂度：On 空间复杂度：O1
  public:
-     bool isValid(string s) {
-         if (0 != s.size() % 2)//奇数肯定不匹配
+     ListNode* swapPairs(ListNode* head) {
+         ListNode* dummy_head = new ListNode(); //设置虚拟头节点
+         ListNode* cur = dummy_head;
+         dummy_head->next = head; //虚拟头节点指向head,方便删除操作
+         while (cur->next != nullptr &&cur->next->next != nullptr)//一次走2步
          {
-             return false;
+             ListNode *temp_left = cur->next;//记录第一个位置
+             ListNode* temp_right = cur->next->next->next;//记录第二个后面的位置，1和2位置互换完，后面跟这个
+
+             cur->next = cur->next->next;//第二个位置，占用第一个位置
+             cur->next->next = temp_left;//旧第一个位置，占用旧第二个位置
+             cur->next->next->next = temp_right;//接后面所有
+
+             cur = cur->next->next;//一次走2步
          }
-         stack<char> st_;
-         for (int i = 0; i < s.size(); ++i)//不配的三种情况：1、遍历完字符串，栈不为空
-         {                                 //2、字符串未遍历完，栈为空
-             if ('(' == s[i])              //3、遍历中，不匹配
-             {
-                 st_.push(')');
-             }
-             else if ('[' == s[i])
-             {
-                 st_.push(']');
-             }
-             else if ('{' == s[i])
-             {
-                 st_.push('}');
-             }
-             else if(st_.empty() || st_.top() != s[i])//情况2、3
-             {
-                 return false;
-             }
-             else
-             {
-                 st_.pop();
-             }
-         }
-         return st_.empty();    //为空，属于全部匹配的情况，不为空：情况1     
+         ListNode * ret = dummy_head->next;
+         delete dummy_head;
+         return ret;
      }
  };
 
-int main()
-{
-    std::cout << "Hello World!\n";
-    string s = "()[]{}";
-    Solution test;
-    test.isValid(s);
-    std::cout << "Hello World!\n";
-    std::cout << "Hello World!\n";
-}
+ int main()
+ {
+     std::cout << "Hello World!\n";
+     int values[] = { 1,2,3,4,5 };
+     ListNode* list = new ListNode(values[0]);
+     ListNode* cur = list;
+     for (int i = 1; i < 5; ++i) {
+         cur->next = new ListNode(values[i]);
+         cur = cur->next;
+     }
+     Solution test;
+     test.swapPairs(list);
+     std::cout << "Hello World!\n";
+     std::cout << "Hello World!\n";
+ }
 
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
 // 调试程序: F5 或调试 >“开始调试”菜单
