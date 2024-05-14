@@ -548,50 +548,77 @@ using namespace std;
 //}
 
 
-//Definition for singly-linked list.
-struct ListNode {
-    int val;
-    ListNode *next;
-    ListNode() : val(0), next(nullptr) {}
-    ListNode(int x) : val(x), next(nullptr) {}
-    ListNode(int x, ListNode *next) : val(x), next(next) {}
- };
- 
- class Solution {//24. 两两交换链表中的节点 时间复杂度：On 空间复杂度：O1
- public:
-     ListNode* swapPairs(ListNode* head) {
-         ListNode* dummy_head = new ListNode(); //设置虚拟头节点
-         ListNode* cur = dummy_head;
-         dummy_head->next = head; //虚拟头节点指向head,方便删除操作
-         while (cur->next != nullptr &&cur->next->next != nullptr)//一次走2步
-         {
-             ListNode *temp_left = cur->next;//记录第一个位置
-             ListNode* temp_right = cur->next->next->next;//记录第二个后面的位置，1和2位置互换完，后面跟这个
+////Definition for singly-linked list.
+//struct ListNode {
+//    int val;
+//    ListNode *next;
+//    ListNode() : val(0), next(nullptr) {}
+//    ListNode(int x) : val(x), next(nullptr) {}
+//    ListNode(int x, ListNode *next) : val(x), next(next) {}
+// };
+// 
+// class Solution {//24. 两两交换链表中的节点 时间复杂度：On 空间复杂度：O1
+// public:
+//     ListNode* swapPairs(ListNode* head) {
+//         ListNode* dummy_head = new ListNode(); //设置虚拟头节点
+//         ListNode* cur = dummy_head;
+//         dummy_head->next = head; //虚拟头节点指向head,方便删除操作
+//         while (cur->next != nullptr &&cur->next->next != nullptr)//一次走2步
+//         {
+//             ListNode *temp_left = cur->next;//记录第一个位置
+//             ListNode* temp_right = cur->next->next->next;//记录第二个后面的位置，1和2位置互换完，后面跟这个
+//
+//             cur->next = cur->next->next;//第二个位置，占用第一个位置
+//             cur->next->next = temp_left;//旧第一个位置，占用旧第二个位置
+//             cur->next->next->next = temp_right;//接后面所有
+//
+//             cur = cur->next->next;//一次走2步
+//         }
+//         ListNode * ret = dummy_head->next;
+//         delete dummy_head;
+//         return ret;
+//     }
+// };
+//
+// int main()
+// {
+//     std::cout << "Hello World!\n";
+//     int values[] = { 1,2,3,4,5 };
+//     ListNode* list = new ListNode(values[0]);
+//     ListNode* cur = list;
+//     for (int i = 1; i < 5; ++i) {
+//         cur->next = new ListNode(values[i]);
+//         cur = cur->next;
+//     }
+//     Solution test;
+//     test.swapPairs(list);
+//     std::cout << "Hello World!\n";
+//     std::cout << "Hello World!\n";
+// }
 
-             cur->next = cur->next->next;//第二个位置，占用第一个位置
-             cur->next->next = temp_left;//旧第一个位置，占用旧第二个位置
-             cur->next->next->next = temp_right;//接后面所有
-
-             cur = cur->next->next;//一次走2步
-         }
-         ListNode * ret = dummy_head->next;
-         delete dummy_head;
-         return ret;
-     }
- };
+class Solution {//27. 移除元素 双指针法 时间复杂度：On 空间复杂度：O1
+public:
+    int removeElement(vector<int>& nums, int val) {
+        int j = 0;
+        
+        for (int i = 0; i < nums.size(); ++i)
+        {
+            if (nums[i] != val)//不相等就赋值，相等，跳过该值
+            {
+                nums[j] = nums[i];
+                j++;
+            }
+        }
+        return j;
+    }
+};
 
  int main()
  {
      std::cout << "Hello World!\n";
-     int values[] = { 1,2,3,4,5 };
-     ListNode* list = new ListNode(values[0]);
-     ListNode* cur = list;
-     for (int i = 1; i < 5; ++i) {
-         cur->next = new ListNode(values[i]);
-         cur = cur->next;
-     }
+     vector<int> values = { 1,2,3,4,5 };
      Solution test;
-     test.swapPairs(list);
+     test.removeElement(values, 2);
      std::cout << "Hello World!\n";
      std::cout << "Hello World!\n";
  }
