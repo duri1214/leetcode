@@ -596,33 +596,70 @@ using namespace std;
 //     std::cout << "Hello World!\n";
 // }
 
-class Solution {//27. 移除元素 双指针法 时间复杂度：On 空间复杂度：O1
+//class Solution {//27. 移除元素 双指针法 时间复杂度：On 空间复杂度：O1
+//public:
+//    int removeElement(vector<int>& nums, int val) {
+//        int j = 0;
+//        
+//        for (int i = 0; i < nums.size(); ++i)
+//        {
+//            if (nums[i] != val)//不相等就赋值，相等，跳过该值
+//            {
+//                nums[j] = nums[i];
+//                j++;
+//            }
+//        }
+//        return j;
+//    }
+//};
+//
+// int main()
+// {
+//     std::cout << "Hello World!\n";
+//     vector<int> values = { 1,2,3,4,5 };
+//     Solution test;
+//     test.removeElement(values, 2);
+//     std::cout << "Hello World!\n";
+//     std::cout << "Hello World!\n";
+// }
+
+class Solution {//28. 找出字符串中第一个匹配项的下标 暴力法 时间复杂度：On*m 空间复杂度：O1
 public:
-    int removeElement(vector<int>& nums, int val) {
-        int j = 0;
-        
-        for (int i = 0; i < nums.size(); ++i)
+    int strStr(string haystack, string needle) {     
+        for (int i = 0; i + needle.size() <= haystack.size(); ++i)
         {
-            if (nums[i] != val)//不相等就赋值，相等，跳过该值
+            bool flag = true;
+            for (int j = 0; j < needle.size(); ++j)
             {
-                nums[j] = nums[i];
-                j++;
+                if (haystack[i+j] == needle[j])
+                {
+
+                }
+                else
+                {
+                    flag = false;
+                    break;
+                }
+            }
+            if (flag)
+            {
+                return i;
             }
         }
-        return j;
+        return -1;
     }
 };
 
  int main()
  {
      std::cout << "Hello World!\n";
-     vector<int> values = { 1,2,3,4,5 };
+     string haystack = "sadbutsad";
+     string needle = "sad";
      Solution test;
-     test.removeElement(values, 2);
+     test.strStr(haystack, needle);
      std::cout << "Hello World!\n";
      std::cout << "Hello World!\n";
  }
-
 // 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
 // 调试程序: F5 或调试 >“开始调试”菜单
 
